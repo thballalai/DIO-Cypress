@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter, useHistory } from 'react-router-dom';
 import Home from './Home';
+import gitApi from '../api/github';
 
 const mockHistoryPush = jest.fn();
 jest.mock('react-router-dom', () => ({
@@ -11,6 +12,9 @@ jest.mock('react-router-dom', () => ({
 
 describe('Home', () => {
     it('Deve informar usuário e ser redirecionado para a página de perfil', () => {
+        gitApi.getUser = jest.fn().mockResolvedValue({ login: 'nathyts'})
+        const user = 'Nath'
+        
         render(
             <BrowserRouter>
                 <Home />
@@ -21,10 +25,10 @@ describe('Home', () => {
         const button = screen.getByRole('button', { name: 'Entrar' });
 
         fireEvent.change(input, {
-            target: { value: 'usuario' }
+            target: { value: user }
         })
         fireEvent.click(button);
-        expect(mockHistoryPush).toHaveBeenCalled();
+        expect(gitApi.getUser).toHaveBeenCalledWith(user);
     })
 
     it('Não deve redirecionar para a página de perfil, caso o usuário não seja informado', () => {

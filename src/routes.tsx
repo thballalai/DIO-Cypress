@@ -7,7 +7,7 @@ const MainRoutes = () => {
     return(
         <Switch>
             <Route path='/' exact={true} component={Home}/>
-            <Route path='/perfil' exact={true} component={Perfil} />
+            <Route path='/:user' exact={true} component={Perfil} />
         </Switch>
     );
 }
